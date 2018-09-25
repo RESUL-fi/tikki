@@ -60,8 +60,8 @@ def parse_value(value: str, default_type: Type[Any]):
     return value if isinstance(value, default_type) else None
 
 
-def get_anydict_value(source_dict: Union[Dict[str, Any], MultiDict],
-                      key: str, default_value: Any, default_type: Type[Any]):
+def get_anydict_value(source_dict: Dict[str, Any], key: str, default_value: Any,
+                      default_type: Type[Any]):
     if isinstance(source_dict, MultiDict):
         value = source_dict.get(key, default_value, default_type)
         return parse_value(value, default_type)
@@ -72,22 +72,35 @@ def get_anydict_value(source_dict: Union[Dict[str, Any], MultiDict],
         raise AppException('Unsupported source_dict type: ' + type(source_dict).__name__)
 
 
-def get_args(received: Dict[str, Any], required: Optional[Dict[str, Any]] = None,
+def get_args(received: Dict[str, Any], required: Optional[Dict[str, Type[Any]]] = None,
              defaultable: Optional[Dict[str, Any]] = None,
-             optional: Optional[Dict[str, Any]] = None,
+             optional: Optional[Dict[str, Type[Any]]] = None,
              constant: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """
+    Retrieve parameters from a dict or MultiDict
+
+    :param received: The dict or MultiDict that contains the source data
+    :param required: The name and type of required key/value
+    :param defaultable: The name and value of keys that will default to value if missing
+    from received
+    :param optional: The name and type of values that will be extracted from received
+    if present
+    :param constant: The name and value that will added to return dict. If key is present
+    in received, the value will be overwritten by the value in constant
+    :return:
+    """
     # Initialize local variables
 
-    required = {} if required is None else required
-    defaultable = {} if defaultable is None else defaultable
-    optional = {} if optional is None else optional
-    constant = {} if constant is None else constant
+    if required is None and defaultable is None and optional is None and constant is None:
+        raise AppException('One of the following is required: '
+                           'required, defaultable, optional or constant.')
+
+    required = required if required else {}
+    defaultable = defaultable if defaultable else {}
+    optional = optional if optional else {}
+    constant = constant if constant else {}
     missing: List[str] = []
     ret_dict: Dict[str, Any] = {}
-
-    if required is None and defaultable is None and optional is None:
-        raise AppException('One of the following is required: '
-                           'required, defaultable or optional.')
 
     # First loop through required args and add missing keys to error list
 

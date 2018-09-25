@@ -139,7 +139,12 @@ def get_args(received: Dict[str, Any], required: Optional[Dict[str, Type[Any]]] 
     return ret_dict
 
 
-def flask_validate_request_is_json(request):
+def flask_validate_request_is_json(request) -> None:
+    """
+    Make sure that request contains json object; if not, raise exception
+    :param request: Flask http request
+    :return:
+    """
     if not request.is_json:
         raise Flask400Exception('Request body is not JSON.')
 

@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/tikki-fi/tikki.svg?branch=master)](https://travis-ci.com/tikki-fi/tikki)
+[![codecov](https://codecov.io/gh/tikki-fi/tikki/branch/master/graph/badge.svg)](https://codecov.io/gh/tikki-fi/tikki)
 
 # Tikki #
 

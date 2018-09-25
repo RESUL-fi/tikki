@@ -1,4 +1,5 @@
-mypy
-flake8
-pylint
 codecov
+flake8
+mypy
+nose
+pylint

@@ -2,12 +2,14 @@ from werkzeug.datastructures import MultiDict
 import datetime
 from exceptions import (
     AppException,
+    DbApiException,
+    FlaskRequestException,
     Flask400Exception,
     Flask500Exception,
     NoRecordsException,
 )
 import flask
-from typing import Dict, List, Union, Optional, Any, Type
+from typing import Dict, List, Union, Optional, Any, Type, Tuple
 import traceback
 from uuid import UUID, uuid4
 import dateutil.parser
@@ -149,7 +151,7 @@ def flask_validate_request_is_json(request) -> None:
         raise Flask400Exception('Request body is not JSON.')
 
 
-def flask_return_exception(e, return_type: int=500):
+def flask_return_exception(e, return_type: int=500) -> Tuple[Dict[str, Any], int]:
     return flask.jsonify({'http_status_code': return_type, 'error': str(e)}), return_type
 
 
@@ -157,12 +159,19 @@ def flask_return_success(result, return_type: int=200):
     return flask.jsonify({'result': result}), return_type
 
 
-def flask_handle_exception(exception):
-    if type(exception) is Flask400Exception:
+def flask_handle_exception(exception: Union[FlaskRequestException, DbApiException]) \
+        -> Tuple[Dict[str, Any], int]:
+    """
+    Convert exception into tuple that can be returned to the user by Flask
+
+    :param exception:
+    :return: A tuple with jsonified error message and a http response type
+    """
+    if isinstance(exception, Flask400Exception):
         return flask_return_exception(exception, 400)
-    elif type(exception) is Flask500Exception:
+    elif isinstance(exception, Flask500Exception):
         return flask_return_exception(exception, 500)
-    elif type(exception) is NoRecordsException:
+    elif isinstance(exception, NoRecordsException):
         return flask_return_exception(exception, 400)
     else:
         return flask_return_exception(traceback.format_exc(), 500)
@@ -171,6 +180,7 @@ def flask_handle_exception(exception):
 def generate_uuid(count: int=1) -> Optional[Union[None, UUID, List[UUID]]]:
     """
     Function for generating UUIDs
+
     :param count: How many UUIDs to generate
     :return: If count == 1, returns just one UUID. For more than one, returns a list
     of UUIDs. For other values of one returns None

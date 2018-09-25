@@ -8,6 +8,6 @@ install: "pip install -r requirements.txt -r requirements-dev.txt"
 script:
   - flake8
   - mypy --ignore-missing-imports .
-  - nosetests
+  - nosetests -v --with-coverage
 after_success:
   codecov

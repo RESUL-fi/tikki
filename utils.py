@@ -169,6 +169,12 @@ def flask_handle_exception(exception):
 
 
 def generate_uuid(count: int=1) -> Optional[Union[None, UUID, List[UUID]]]:
+    """
+    Function for generating UUIDs
+    :param count: How many UUIDs to generate
+    :return: If count == 1, returns just one UUID. For more than one, returns a list
+    of UUIDs. For other values of one returns None
+    """
     if count == 1:
         return uuid4()
     elif count > 1:

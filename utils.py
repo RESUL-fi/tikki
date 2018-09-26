@@ -188,8 +188,5 @@ def generate_uuid(count: int=1) -> Optional[Union[UUID, List[UUID]]]:
     if count == 1:
         return uuid4()
     elif count > 1:
-        ret = []
-        for i in range(0, count):
-            ret.append(uuid4())
-        return ret
+        return [uuid4() for _ in range(count)]
     return None

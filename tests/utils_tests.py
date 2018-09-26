@@ -2,6 +2,7 @@
 Tests for utils module
 """
 from unittest import TestCase
+from uuid import UUID
 
 import exceptions
 import utils
@@ -13,9 +14,13 @@ optional = {'a': int, 'b': str}
 constant = {'a': 2}
 
 
-class UtilsTestCase(TestCase):
-    def test_get_args_exception(self):
+class UtilsGetArgsTestCase(TestCase):
+    def test_get_args_missing_args(self):
         self.assertRaises(exceptions.AppException, utils.get_args, received)
+
+    def test_get_args_missing_keys(self):
+        received_truncated = {'b': 'c'}
+        self.assertRaises(exceptions.AppException, utils.get_args, received_truncated)
 
     def test_get_args_required(self):
         expected = {'a': 1}
@@ -40,3 +45,17 @@ class UtilsTestCase(TestCase):
                                             defaultable=defaultable,
                                             optional=optional,
                                             constant=constant), expected)
+
+
+class UuidTestCase(TestCase):
+    def test_generate_uuid_default(self):
+        val = utils.generate_uuid()
+        self.assertIsInstance(val, UUID)
+
+    def test_generate_uuid_many(self):
+        obj_count = 10
+        val = utils.generate_uuid(obj_count)
+        self.assertEqual(len(val), obj_count)
+
+    def test_generate_uuid_zero(self):
+        self.assertIsNone(utils.generate_uuid(0))

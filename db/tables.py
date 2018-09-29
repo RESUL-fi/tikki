@@ -7,7 +7,7 @@ import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy.orm as sao
 from typing import Any, Dict
-
+from sqlalchemy_utils import UUIDType, JSONType
 
 class TikkiBase(object):
     """
@@ -39,13 +39,13 @@ class User(Base):
     Table containing user details
     """
     __tablename__ = 'user'
-    id = sa.Column(sa.String, primary_key=True)
+    id = sa.Column(UUIDType, primary_key=True)
     username = sa.Column(sa.String, nullable=False, unique=True)
     password = sa.Column(sa.String, nullable=False)
     type_id = sa.Column(sa.Integer, nullable=False, default=1)
     created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
     updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
-    payload = sa.Column(sa.JSON, nullable=False)
+    payload = sa.Column(JSONType, nullable=False)
 
     @property
     def json_dict(self) -> Dict[str, Any]:
@@ -65,29 +65,7 @@ class RecordType(Base):
     __tablename__ = 'record_type'
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String, nullable=True)
-    schema = sa.Column(sa.JSON, nullable=False)
-    category_id = sa.Column(sa.Integer, nullable=False)
-
-    @property
-    def json_dict(self):
-        val = {'id': str(self.id),
-               'name': self.name,
-               'schema': self.schema,
-               'category_id': self.category_id,
-               }
-        return val
-
-
-class RequestLog(Base):
-    """
-    Log containing requests. Deprecated, will be replaced by
-    regular logging framework.
-    """
-
-    __tablename__ = 'request_log'
-    id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column(sa.String, nullable=True)
-    schema = sa.Column(sa.JSON, nullable=False)
+    schema = sa.Column(JSONType, nullable=False)
     category_id = sa.Column(sa.Integer, nullable=False)
 
     @property
@@ -106,17 +84,17 @@ class Record(Base):
     answers to questionnaires.
     """
     __tablename__ = 'record'
-    id = sa.Column(sa.String, primary_key=True)
+    id = sa.Column(UUIDType, primary_key=True)
     created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
     updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
-    user_id = sa.Column(sa.String, sa.ForeignKey('user.id'), nullable=True)
-    created_user_id = sa.Column(sa.String, nullable=True)
-    event_id = sa.Column(sa.String, sa.ForeignKey('event.id'), nullable=True)
-    parent_record_id = sa.Column(sa.String, nullable=True)
+    user_id = sa.Column(UUIDType, sa.ForeignKey('user.id'), nullable=True)
+    created_user_id = sa.Column(UUIDType, nullable=True)
+    event_id = sa.Column(UUIDType, sa.ForeignKey('event.id'), nullable=True)
+    parent_record_id = sa.Column(UUIDType, nullable=True)
     type_id = sa.Column(sa.Integer, nullable=False, default=0)
-    validated_user_id = sa.Column(sa.String, nullable=True)
+    validated_user_id = sa.Column(UUIDType, nullable=True)
     validated_at = sa.Column(sa.DateTime, nullable=True)
-    payload = sa.Column(sa.JSON, nullable=False)
+    payload = sa.Column(JSONType, nullable=False)
 
     @property
     def json_dict(self):
@@ -144,19 +122,19 @@ class Event(Base):
     Table containing Events where activities can be executed.
     """
     __tablename__ = 'event'
-    id = sa.Column(sa.String, primary_key=True)
+    id = sa.Column(UUIDType, primary_key=True)
     organization_id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String, nullable=False)
     description = sa.Column(sa.String, nullable=False)
     event_at = sa.Column(sa.DateTime, nullable=False)
     created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
     updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
-    user_id = sa.Column(sa.String, sa.ForeignKey('user.id'), nullable=True)
+    user_id = sa.Column(UUIDType, sa.ForeignKey('user.id'), nullable=True)
     address = sa.Column(sa.String, nullable=True)
     postal_code = sa.Column(sa.String, nullable=True)
     longitude = sa.Column(sa.Numeric, nullable=True)
     latitude = sa.Column(sa.Numeric, nullable=True)
-    payload = sa.Column(sa.JSON, nullable=False)
+    payload = sa.Column(JSONType, nullable=False)
     participants = sao.relationship('UserEventLink', lazy='joined')
 
     @property
@@ -186,11 +164,11 @@ class UserEventLink(Base):
     Table containing links between users and events.
     """
     __tablename__ = 'user_event_link'
-    user_id = sa.Column(sa.String, sa.ForeignKey(User.id), primary_key=True)
-    event_id = sa.Column(sa.String, sa.ForeignKey(Event.id), primary_key=True)
+    user_id = sa.Column(UUIDType, sa.ForeignKey(User.id), primary_key=True)
+    event_id = sa.Column(UUIDType, sa.ForeignKey(Event.id), primary_key=True)
     created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
     updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
-    payload = sa.Column(sa.JSON, nullable=False)
+    payload = sa.Column(JSONType, nullable=False)
 
     @property
     def json_dict(self):

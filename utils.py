@@ -38,6 +38,7 @@ def _add_config_from_env(app: Any, config_key: str, env_variable: str,
         missing_list.append(env_variable)
         return False
 
+
 def get_sqla_uri() -> str:
     """
     Retrieve SQL Alchemy URI from environment variables

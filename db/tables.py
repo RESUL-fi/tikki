@@ -9,6 +9,7 @@ import sqlalchemy.orm as sao
 from typing import Any, Dict
 from sqlalchemy_utils import UUIDType, JSONType
 
+
 class TikkiBase(object):
     """
     JSON serializable Base table class.
@@ -43,8 +44,8 @@ class User(Base):
     username = sa.Column(sa.String, nullable=False, unique=True)
     password = sa.Column(sa.String, nullable=False)
     type_id = sa.Column(sa.Integer, nullable=False, default=1)
-    created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
-    updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
+    created_at = sa.Column(sa.DateTime, nullable=False, default=sa.func.now())
+    updated_at = sa.Column(sa.DateTime, nullable=False, default=sa.func.now())
     payload = sa.Column(JSONType, nullable=False)
 
     @property
@@ -85,8 +86,8 @@ class Record(Base):
     """
     __tablename__ = 'record'
     id = sa.Column(UUIDType, primary_key=True)
-    created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
-    updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
+    created_at = sa.Column(sa.DateTime, nullable=False, default=sa.func.now())
+    updated_at = sa.Column(sa.DateTime, nullable=False, default=sa.func.now())
     user_id = sa.Column(UUIDType, sa.ForeignKey('user.id'), nullable=True)
     created_user_id = sa.Column(UUIDType, nullable=True)
     event_id = sa.Column(UUIDType, sa.ForeignKey('event.id'), nullable=True)
@@ -127,8 +128,8 @@ class Event(Base):
     name = sa.Column(sa.String, nullable=False)
     description = sa.Column(sa.String, nullable=False)
     event_at = sa.Column(sa.DateTime, nullable=False)
-    created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
-    updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
+    created_at = sa.Column(sa.DateTime, nullable=False, default=sa.func.now())
+    updated_at = sa.Column(sa.DateTime, nullable=False, default=sa.func.now())
     user_id = sa.Column(UUIDType, sa.ForeignKey('user.id'), nullable=True)
     address = sa.Column(sa.String, nullable=True)
     postal_code = sa.Column(sa.String, nullable=True)
@@ -164,10 +165,10 @@ class UserEventLink(Base):
     Table containing links between users and events.
     """
     __tablename__ = 'user_event_link'
-    user_id = sa.Column(UUIDType, sa.ForeignKey(User.id), primary_key=True)
-    event_id = sa.Column(UUIDType, sa.ForeignKey(Event.id), primary_key=True)
-    created_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
-    updated_at = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now())
+    user_id = sa.Column(UUIDType, sa.ForeignKey('user.id'), primary_key=True)
+    event_id = sa.Column(UUIDType, sa.ForeignKey('event.id'), primary_key=True)
+    created_at = sa.Column(sa.DateTime, nullable=False, default=sa.func.now())
+    updated_at = sa.Column(sa.DateTime, nullable=False, default=sa.func.now())
     payload = sa.Column(JSONType, nullable=False)
 
     @property

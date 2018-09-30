@@ -1,7 +1,6 @@
 """
 Module containing all SQL Alchemy table classes that are used by the platform.
 """
-import datetime
 import json
 import sqlalchemy as sa
 from sqlalchemy.ext.declarative import declarative_base

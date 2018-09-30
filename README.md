@@ -2,6 +2,8 @@
 [![PyPI version](https://badge.fury.io/py/tikki.svg)](https://badge.fury.io/py/tikki)
 [![codecov](https://codecov.io/gh/tikki-fi/tikki/branch/master/graph/badge.svg)](https://codecov.io/gh/tikki-fi/tikki)
 [![PyPI](https://img.shields.io/pypi/pyversions/tikki.svg?maxAge=2592000)](https://pypi.python.org/pypi/tikki)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Tikki #
 
 Tikki is the application for collection and management of field aptitude 

@@ -4,12 +4,6 @@
 [![PyPI](https://img.shields.io/pypi/pyversions/tikki.svg)](https://www.python.org/downloads/)
 [![PyPI license](https://img.shields.io/pypi/l/tikki.svg)](https://opensource.org/licenses/MIT)
 
-
-.. image:: https://pypip.in/license/lisense/badge.svg
-:target: https://pypi.python.org/pypi//
-:alt: License
-
-
 # Tikki #
 
 Tikki is the application for collection and management of field aptitude 

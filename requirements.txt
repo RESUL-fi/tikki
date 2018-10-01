@@ -6,7 +6,7 @@ flask-jwt-simple
 flask-cors
 mypy
 nose
-psycopg2
+psycopg2-binary
 pylint
 setuptools
 sphinx

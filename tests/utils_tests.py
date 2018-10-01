@@ -4,7 +4,7 @@ Tests for utils module
 from unittest import TestCase, mock
 from uuid import UUID
 
-import exceptions
+from tikki import exceptions
 import utils
 
 

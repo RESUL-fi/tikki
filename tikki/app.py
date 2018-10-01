@@ -5,8 +5,8 @@ This module serves the RESTful interface required by the Tikki application.
 """
 import argparse
 import datetime
-from db.tables import User, Record, RecordType, Event, UserEventLink
-import db.api as db_api
+from tikki.db.tables import User, Record, RecordType, Event, UserEventLink
+from tikki import db as db_api
 from enum import IntEnum
 from flask import Flask, request, jsonify
 from flask_cors import CORS

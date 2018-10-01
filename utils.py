@@ -1,6 +1,6 @@
 from werkzeug.datastructures import MultiDict
 import datetime
-from exceptions import (
+from tikki.exceptions import (
     AppException,
     DbApiException,
     FlaskRequestException,
@@ -14,7 +14,7 @@ import traceback
 from uuid import UUID, uuid4
 import dateutil.parser
 import os
-from db import tables
+from tikki.db import tables
 
 
 def _add_config_from_env(app: Any, config_key: str, env_variable: str,
